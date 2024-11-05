@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16' # Ganti dengan versi Node.js yang Anda gunakan
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run build
+      run: npm run build # Jika Anda memiliki script build, jika tidak bisa dihapus
+
+    - name: Run tests
+      run: npm test
+
+    - name: Upload coverage
+      if: success() # Mengupload laporan cakupan jika pengujian berhasil
+      uses: codecov/codecov-action@v2
+      with:
+        file: ./coverage/lcov.info # Jalur ke file laporan cakupan
